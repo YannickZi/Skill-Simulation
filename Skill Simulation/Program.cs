@@ -62,7 +62,6 @@ namespace Skill_Simulation
             int currSkillDiffB = rand.Next(-playerB.Consistency, playerB.Consistency);
             double skillA = playerA.Skill+currSkillDiffA;
             double skillB = playerB.Skill+currSkillDiffB;
-            //Console.WriteLine(playerA.Name + ": " + skillA + ", " + playerB.Name + ": " + skillB);            DEBUG
             double trSkillA = Math.Pow(10, (skillA / 400d));
             double trSkillB = Math.Pow(10, (skillB / 400d));
             double winChanceA = trSkillA / (trSkillA + trSkillB);
@@ -107,7 +106,7 @@ namespace Skill_Simulation
 
                         player.QueueChance = 0;
                     else                            //player might start playing again
-                        player.QueueChance += player.Recharge;
+                        player.QueueChance += player.Recharge;                  //TODO: queue chance can reach > 100%
                     player.PlayedLast = 0;
                     player.Skill =  Math.Round((player.Skill * (0.989 + player.SkillDecay)), 2);
                 }
@@ -211,9 +210,117 @@ namespace Skill_Simulation
             return Math.Round((totalDifference/playerCount), 2);
         }
 
-        public static void CalculateReflElo(List<MatchModel> lastRoundMatches, List<MatchModel> allMatches)
+        public static void CalculateReflElo(List<MatchModel> lastRoundMatches, List<MatchModel> allMatches, List<PlayerModel> allPlayers)
         {
-            int roundsToConsider = 10;
+            int roundsToConsider = 10;          
+            List<PlayerModel> currentPlayers = GetCurrentPlayers(lastRoundMatches, allPlayers);         //list of all players of this round
+            List<MatchModel> relevantMatches = GetRelevantMatches(allMatches, roundsToConsider);        //list of all matches of all rounds to consider
+            List<PlayerModel> affectedPlayers = new List<PlayerModel>();                                //list of all players to update ReflElo
+            List<MatchModel> affectedMatches = new List<MatchModel>();                                  //list of all matches containing those players
+            var toCalculate = GetAffectedPlayers(currentPlayers, relevantMatches, allPlayers);
+            affectedPlayers.AddRange(toCalculate.Item1);
+            affectedMatches.AddRange(lastRoundMatches);                                                 //add matches of this round
+            affectedMatches.AddRange(toCalculate.Item2);                                                //add discovered matches
+            affectedMatches = affectedMatches.OrderBy(m => m.Round).ToList();
+            int currentRound = affectedMatches.Last().Round;
+            foreach( MatchModel m in affectedMatches)
+            {
+                int relativeRound = m.Round - (currentRound - roundsToConsider);                          //round number only considering relevant Matches
+                PlayerModel winner = affectedPlayers.Find(p => p.ID == m.WID);
+                PlayerModel loser = affectedPlayers.Find(p => p.ID == m.LID);
+                double ageFactor = (1 - Math.Pow(1 - (double)relativeRound / (double)roundsToConsider, 2));      // 1-(1-x/10)^2     -> asymptotic function: rate of change decreases with x
+                double reflEloChange = Math.Round(DetermineEloChange(winner.ReflectingElo, loser.ReflectingElo) * ageFactor, 2);   //older matches are less important than newer matches   
+                winner.ReflectingElo += reflEloChange;
+                loser.ReflectingElo -= reflEloChange;
+            }
+        }
+        /// <summary>
+        /// get a list of all players participating in a given list of matches
+        /// </summary>
+        /// <param name="lastRoundMatches">list of matches in the last round</param>
+        /// <param name="allPlayers">list of all players</param>
+        /// <returns>list of players</returns>
+        public static List<PlayerModel> GetCurrentPlayers(List<MatchModel> lastRoundMatches, List<PlayerModel> allPlayers)
+        {
+            List<PlayerModel> currentPlayers = new List<PlayerModel>();
+            foreach( MatchModel match in lastRoundMatches)
+            {
+                currentPlayers.Add(allPlayers.Find(p => p.ID == match.WID));
+                currentPlayers.Add(allPlayers.Find(p => p.ID == match.LID));
+            }
+            return currentPlayers;
+        }
+        /// <summary>
+        /// get a list of all matches that happened in the last rounds 
+        /// </summary>
+        /// <param name="allMatches">list of all matches</param>
+        /// <param name="rounds">amount of rounds to be considered</param>
+        /// <returns>list of matches</returns>
+        public static List<MatchModel> GetRelevantMatches(List<MatchModel> allMatches, int rounds)
+        {
+            int currentRound = allMatches.Last().Round;     //TODO: only works if allMatches is not Null
+            int earliestRound = currentRound - rounds + 1;
+            List<MatchModel> relevantMatches = new List<MatchModel>();
+            foreach(MatchModel match in allMatches)
+            {
+                if (match.Round >= earliestRound) 
+                    relevantMatches.Add(match);
+            }
+            return relevantMatches;
+        }
+        /// <summary>
+        /// given a list of players and matches, find all players that participated in any match with any of the given players
+        /// check for all new found players aswell, until no new players are found
+        /// </summary>
+        /// <param name="currentPlayers">list of players to check</param>
+        /// <param name="relevantMatches">list of matches to check in</param>
+        /// <param name="allPlayers">list of all players</param>
+        /// <returns>list of relevant players and all additonal matches they play in</returns>
+        public static (List<PlayerModel>, List<MatchModel>) GetAffectedPlayers(List<PlayerModel> currentPlayers, List<MatchModel> relevantMatches, List<PlayerModel> allPlayers)
+        {
+            List<MatchModel> affectedMatchesNew = new List<MatchModel>();
+            List<PlayerModel> affectedPlayers = new List<PlayerModel>();
+            affectedPlayers.AddRange(currentPlayers);
+            List<PlayerModel> toConsider = new List<PlayerModel>();
+            toConsider.AddRange(currentPlayers);
+            List<MatchModel> relevMatchesToCheck = new List<MatchModel>();
+            int currentRound = relevantMatches.Last().Round;
+            foreach(MatchModel match in relevantMatches){       //filter out all matches of the current round
+                if (match.Round != currentRound)
+                    relevMatchesToCheck.Add(match);
+            }
+            while(toConsider.Count > 0)             //repeat until all players in relevant matches have been checked
+            {
+                PlayerModel currentP = toConsider.ElementAt(0);
+                for (int i = 0; i < relevMatchesToCheck.Count; i++)       //check all relevant matches for current player
+                {
+                    MatchModel match = relevMatchesToCheck.ElementAt(i);
+                    if(match.WID == currentP.ID)                    //relevant player is winner
+                    {
+                        if(!affectedPlayers.Any(p => p.ID == match.LID))                        //loser is new  
+                        {
+                            affectedPlayers.Add(allPlayers.Find(p => p.ID == match.LID));       //add opponent      TODO: searches all players, could search only players in relevMatchesToCheck
+                            toConsider.Add(affectedPlayers.Last());
+                        }
+                        affectedMatchesNew.Add(match);                                          //add match
+                        relevMatchesToCheck.Remove(match);                                      //prevents checking match again for loser 
+                        i--;                                                                    //prevents skipping next match
+                    }
+                    if (match.LID == currentP.ID)                                               //relevant player is loser
+                    {
+                        if(!affectedPlayers.Any(p => p.ID == match.WID))
+                        {
+                            affectedPlayers.Add(allPlayers.Find(p => p.ID == match.WID));
+                            toConsider.Add(affectedPlayers.Last());
+                        }
+                        affectedMatchesNew.Add(match);
+                        relevMatchesToCheck.Remove(match);
+                        i--;
+                    }
+                }
+                toConsider.Remove(currentP);                         //checked all matches for this player
+            }
+            return (affectedPlayers, affectedMatchesNew);
         }
     }
 }

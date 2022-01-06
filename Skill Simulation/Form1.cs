@@ -39,7 +39,7 @@ namespace Skill_Simulation
         private void LoadPlayerList()
         {
             playerListView.Items.Clear();
-            players = SqliteDataAccess.LoadPlayers(comboBox1.Text);
+            players = SqliteDataAccess.LoadPlayers(comboBox1.Text);         //filtered by dropdown list
             foreach (PlayerModel player in players)
             {
                 ListViewItem nextPlayer = new ListViewItem(player.ID.ToString()); //add all relevant values of a player to the list
@@ -234,8 +234,10 @@ namespace Skill_Simulation
                 {
                     matchesNewRound.AddRange(Program.CreateMatches(queuedPlayers, matchRound));
                 }
-                matchesNewTotal.AddRange(matchesNewRound);
-                matches.AddRange(matchesNewRound);
+                matchesNewTotal.AddRange(matchesNewRound);              //for saving into the DB
+                matches.AddRange(matchesNewRound);                      //for immmediate use in calculations
+                if(matchesNewRound.Count > 0)
+                    Program.CalculateReflElo(matchesNewRound, matches, players);
             }
             SqliteDataAccess.SaveMatches(matchesNewTotal);
             SqliteDataAccess.UpdatePlayers(players);

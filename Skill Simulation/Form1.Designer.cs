@@ -39,6 +39,8 @@ namespace Skill_Simulation
             this.skillRank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Elo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.eloRank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.reflectingElo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.reflEloRank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.queueChance = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.consistency = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.played = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -75,8 +77,7 @@ namespace Skill_Simulation
             this.label10 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.maxRoundDisplay = new System.Windows.Forms.TextBox();
-            this.reflectingElo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.reflEloRank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label11 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -165,6 +166,15 @@ namespace Skill_Simulation
             // 
             this.eloRank.Text = "Elo Rk";
             this.eloRank.Width = 48;
+            // 
+            // reflectingElo
+            // 
+            this.reflectingElo.Text = "Refl Elo";
+            // 
+            // reflEloRank
+            // 
+            this.reflEloRank.Text = "Refl Elo Rk";
+            this.reflEloRank.Width = 66;
             // 
             // queueChance
             // 
@@ -425,7 +435,8 @@ namespace Skill_Simulation
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "SkillRank",
-            "EloRank"});
+            "EloRank",
+            "ReflEloRank"});
             this.comboBox1.Location = new System.Drawing.Point(436, 18);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
@@ -442,20 +453,21 @@ namespace Skill_Simulation
             this.maxRoundDisplay.Text = "10";
             this.maxRoundDisplay.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
             // 
-            // reflectingElo
+            // label11
             // 
-            this.reflectingElo.Text = "Refl Elo";
-            // 
-            // reflEloRank
-            // 
-            this.reflEloRank.Text = "Refl Elo Rk";
-            this.reflEloRank.Width = 66;
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(166, 502);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(113, 13);
+            this.label11.TabIndex = 23;
+            this.label11.Text = "TODO: add refl elo diff";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1475, 640);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.maxRoundDisplay);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label10);
@@ -536,5 +548,6 @@ namespace Skill_Simulation
         private System.Windows.Forms.TextBox maxRoundDisplay;
         private System.Windows.Forms.ColumnHeader reflectingElo;
         private System.Windows.Forms.ColumnHeader reflEloRank;
+        private System.Windows.Forms.Label label11;
     }
 }
