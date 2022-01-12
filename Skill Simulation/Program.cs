@@ -106,7 +106,9 @@ namespace Skill_Simulation
 
                         player.QueueChance = 0;
                     else                            //player might start playing again
-                        player.QueueChance += player.Recharge;                  //TODO: queue chance can reach > 100%
+                        player.QueueChance += player.Recharge;
+                    if (player.QueueChance > 1)
+                        player.QueueChance = 1;
                     player.PlayedLast = 0;
                     player.Skill =  Math.Round((player.Skill * (0.989 + player.SkillDecay)), 2);
                 }
@@ -195,24 +197,33 @@ namespace Skill_Simulation
             return (playersUpdated, match);
         }
         /// <summary>
-        /// calculates the average difference between the Elo Rank and Skill Rank for every player in a list of given players
+        /// calculates the average difference between the Elo Rank/Reflecting Elo Rank and Skill Rank for every player in a list of given players
         /// </summary>
-        /// <param name="players">list of players</param>
-        /// <returns>rounded double average difference</returns>
-        public static double CalculateEloRankDiff(List<PlayerModel> players)
+        /// <param name="players">list of all players</param>
+        /// <returns>rounded average difference</returns>
+        public static (double, double) CalculateEloRankDiffs(List<PlayerModel> players)
         {
             double playerCount = players.Count();
-            double totalDifference = 0;
+            double eloDiff = 0;
+            double reflEloDiff = 0;
             foreach(PlayerModel player in players)
             {
-                totalDifference += Math.Abs(player.SkillRank - player.EloRank);
+                eloDiff += Math.Abs(player.SkillRank - player.EloRank);
+                reflEloDiff += Math.Abs(player.SkillRank - player.ReflEloRank);
             }
-            return Math.Round((totalDifference/playerCount), 2);
+            eloDiff = Math.Round((eloDiff / playerCount), 2);
+            reflEloDiff = Math.Round((reflEloDiff / playerCount), 2);
+            return (eloDiff, reflEloDiff);
         }
-
+        /// <summary>
+        /// calculates the Reflecting Elo for all affected players of the last round
+        /// </summary>
+        /// <param name="lastRoundMatches">list of all matches of the last round</param>
+        /// <param name="allMatches">list of all matches</param>
+        /// <param name="allPlayers">list of all players</param>
         public static void CalculateReflElo(List<MatchModel> lastRoundMatches, List<MatchModel> allMatches, List<PlayerModel> allPlayers)
         {
-            int roundsToConsider = 10;          
+            int roundsToConsider = 5;          
             List<PlayerModel> currentPlayers = GetCurrentPlayers(lastRoundMatches, allPlayers);         //list of all players of this round
             List<MatchModel> relevantMatches = GetRelevantMatches(allMatches, roundsToConsider);        //list of all matches of all rounds to consider
             List<PlayerModel> affectedPlayers = new List<PlayerModel>();                                //list of all players to update ReflElo
@@ -258,7 +269,7 @@ namespace Skill_Simulation
         /// <returns>list of matches</returns>
         public static List<MatchModel> GetRelevantMatches(List<MatchModel> allMatches, int rounds)
         {
-            int currentRound = allMatches.Last().Round;     //TODO: only works if allMatches is not Null
+            int currentRound = allMatches.Last().Round;
             int earliestRound = currentRound - rounds + 1;
             List<MatchModel> relevantMatches = new List<MatchModel>();
             foreach(MatchModel match in allMatches)

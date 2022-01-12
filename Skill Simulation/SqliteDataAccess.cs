@@ -51,31 +51,7 @@ namespace Skill_Simulation
                 cnn.Execute("delete from Player");
             }
 
-        }
-        /// <summary>
-        /// load a specific player from the DB
-        /// </summary>
-        /// <param name="id">id of the player to be loaded</param>
-        /// <returns>one player</returns>
-        public static PlayerModel GetPlayer(string id)
-        {
-            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-            {
-                var output = cnn.QuerySingle<PlayerModel>("select * from Player where ID = " + id, new DynamicParameters());
-                return output;
-            }
-        }     
-        /// <summary>
-        /// update a specific player in the DB
-        /// </summary>
-        /// <param name="player">player to be updated</param>
-        public static void UpdatePlayer(PlayerModel player)
-        {
-            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-            {
-                cnn.Execute("update Player set Skill = @SKill, Elo = @Elo, ReflectingElo = @ReflectingElo, QueueChance = @QueueChance, Played = @Played, PlayedLast = @PlayedLast where ID = @ID", player);       //works?
-            }
-        }
+        } 
         /// <summary>
         /// update a list of players in the DB
         /// </summary>
@@ -92,19 +68,6 @@ namespace Skill_Simulation
                 }
 
             }
-        }
-        /// <summary>
-        /// update the elo value from a specific player in the DB
-        /// </summary>
-        /// <param name="id">id of the player to be updated</param>
-        /// <param name="elo">elo of the player to be updated</param>
-        public static void UpdatePlayerElo(string id, int elo)
-        {
-            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-            {
-                cnn.Execute("update Player set Elo = " + elo + " where ID = " + id);
-            }
-
         }
         /// <summary>
         /// load all matches from the DB
@@ -152,18 +115,6 @@ namespace Skill_Simulation
                 var output = cnn.Query<MatchModel>("select * from Match where (WID = " + id + " or LID = " + id + ") and Round > " + lastToHide, new DynamicParameters());
                 return output.ToList();
             }
-        }
-        /// <summary>
-        /// save a match to the DB
-        /// </summary>
-        /// <param name="match"></param>
-        public static void SaveMatch(MatchModel match)
-        {
-            using (IDbConnection cnn = new SQLiteConnection(LoadConnectionString()))
-            {
-                cnn.Execute("insert into Match (Winner, WSkill, WElo, Loser, LSkill, LElo, EloChange, WID, LID, Round) values (@Winner, @WSkill, @WElo, @Loser, @LSkill, @LElo, @EloChange, @WID, @LID, @Round)", match);
-            }
-
         }
         /// <summary>
         /// save a list of matches into the DB

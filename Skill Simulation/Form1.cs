@@ -44,24 +44,26 @@ namespace Skill_Simulation
             {
                 ListViewItem nextPlayer = new ListViewItem(player.ID.ToString()); //add all relevant values of a player to the list
                 nextPlayer.SubItems.Add(player.Name);
-                nextPlayer.SubItems.Add(player.Skill.ToString());
                 nextPlayer.SubItems.Add(player.SkillRank.ToString());
-                nextPlayer.SubItems.Add(player.Elo.ToString());
                 nextPlayer.SubItems.Add(player.EloRank.ToString());
-                nextPlayer.SubItems.Add(player.ReflectingElo.ToString());
                 nextPlayer.SubItems.Add(player.ReflEloRank.ToString());
-                double queuePerc = Math.Round(player.QueueChance * 100, 1);  //transform percentage 
-                nextPlayer.SubItems.Add(queuePerc.ToString() + "%");
-                nextPlayer.SubItems.Add(player.Consistency.ToString());
+                nextPlayer.SubItems.Add(player.Skill.ToString());
+                nextPlayer.SubItems.Add(player.Elo.ToString());
+                nextPlayer.SubItems.Add(player.ReflectingElo.ToString());
+                //double queuePerc = Math.Round(player.QueueChance * 100, 1);  //transform percentage 
+                //nextPlayer.SubItems.Add(queuePerc.ToString() + "%");
+                //nextPlayer.SubItems.Add(player.Consistency.ToString());
                 nextPlayer.SubItems.Add(player.Played.ToString());
-                nextPlayer.SubItems.Add(player.Drive.ToString());
-                nextPlayer.SubItems.Add(player.Recharge.ToString());
-                nextPlayer.SubItems.Add(player.PlayedLast.ToString());
-                nextPlayer.SubItems.Add(player.SkillGain.ToString());
-                nextPlayer.SubItems.Add(player.SkillDecay.ToString());
+                //nextPlayer.SubItems.Add(player.Drive.ToString());
+                //nextPlayer.SubItems.Add(player.Recharge.ToString());
+                //nextPlayer.SubItems.Add(player.PlayedLast.ToString());
+                //nextPlayer.SubItems.Add(player.SkillGain.ToString());
+                //nextPlayer.SubItems.Add(player.SkillDecay.ToString());
                 playerListView.Items.Add(nextPlayer);
             }
-            label8.Text = Program.CalculateEloRankDiff(players).ToString();           
+            var eloDiffs = Program.CalculateEloRankDiffs(players);
+            label8.Text = eloDiffs.Item1.ToString();
+            label12.Text = eloDiffs.Item2.ToString();   
         }
         /// <summary>
         /// load matches from DB into GUI
@@ -153,41 +155,6 @@ namespace Skill_Simulation
         {
 
         }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-        /// <summary>
-        /// start match between two chosen players
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void button3_Click(object sender, EventArgs e)      //TODO take StartMatch output, update other players aswell
-        {
-            matchRound++;
-            Program.StartMatch(SqliteDataAccess.GetPlayer(idA), SqliteDataAccess.GetPlayer(idB), matchRound);
-            LoadMatchList();
-            LoadPlayerList();
-        }
-        /// <summary>
-        /// pick first player
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-            idA = textBox2.Text;
-        }
-        /// <summary>
-        /// pick second player
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-            idB = textBox3.Text;
-        }
         /// <summary>
         /// filter match history by player id
         /// </summary>
@@ -277,6 +244,21 @@ namespace Skill_Simulation
         private void textBox6_TextChanged(object sender, EventArgs e)
         {
             LoadMatchList();
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
         }
     }
     
