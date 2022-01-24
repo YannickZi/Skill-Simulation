@@ -34,12 +34,13 @@ namespace Skill_Simulation
         }
         /// <summary>
         /// random name generator
-        /// Uses the most common english syllables and randomly concatenates 2-4 of them
+        /// Uses the most common english  syllables of length 2/3 and randomly concatenates 2-4 of them
         /// </summary>
         /// <returns>Name</returns>
         public static string GenerateName()
         {
-            string[] syllables = new string[] { "TH", "HE", "AN", "ER", "IN", "RE", "ND", "OU", "EN", "ON", "ED", "TO", "IT", "AT", "HA", "THE", "AND", "ING", "HER", "YOU", "VER", "WAS", "HAT", "FOR", "NOT", "THI", "THA", "HIS", "ENT", "ION" };
+            string[] syllables = new string[] { "TH", "HE", "AN", "ER", "IN", "RE", "ND", "OU", "EN", "ON", "ED", "TO", "IT", "AT", "HA", "VE", "AS", "OR", "HI", "AR", "TE", "ES", "NG", "IS", "ST",
+                                                "THE", "AND", "ING", "HER", "YOU", "VER", "WAS", "HAT", "FOR", "NOT", "THI", "THA", "HIS", "ENT", "ION", "ITH", "ERE", "WIT", "ALL", "EVE", "OUL", "ULD", "TIO", "TER", "HAD" };
             int sylAmount = rand.Next(2, 4);
             string name = "";
             for(int i = 0; i < sylAmount; i++)

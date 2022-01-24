@@ -18,8 +18,6 @@ namespace Skill_Simulation
         int addPlayerAmount = 0;            //amount of players to add
         int simulRoundAmount = 0;           //amount of rounds to simulate
         int matchRound;
-        string idA = "";                    //ID of player 1 in a match                         TODO: just use text boxes
-        string idB = "";                    //ID of player 2 in a match
         string idMatchFilter = "";          //ID of player to filter match history
 
         /// <summary>
@@ -50,15 +48,7 @@ namespace Skill_Simulation
                 nextPlayer.SubItems.Add(player.Skill.ToString());
                 nextPlayer.SubItems.Add(player.Elo.ToString());
                 nextPlayer.SubItems.Add(player.ReflectingElo.ToString());
-                //double queuePerc = Math.Round(player.QueueChance * 100, 1);  //transform percentage 
-                //nextPlayer.SubItems.Add(queuePerc.ToString() + "%");
-                //nextPlayer.SubItems.Add(player.Consistency.ToString());
                 nextPlayer.SubItems.Add(player.Played.ToString());
-                //nextPlayer.SubItems.Add(player.Drive.ToString());
-                //nextPlayer.SubItems.Add(player.Recharge.ToString());
-                //nextPlayer.SubItems.Add(player.PlayedLast.ToString());
-                //nextPlayer.SubItems.Add(player.SkillGain.ToString());
-                //nextPlayer.SubItems.Add(player.SkillDecay.ToString());
                 playerListView.Items.Add(nextPlayer);
             }
             var eloDiffs = Program.CalculateEloRankDiffs(players);
@@ -75,7 +65,14 @@ namespace Skill_Simulation
             if (string.IsNullOrEmpty(maxRoundDisplay.Text))
                 roundFilter = 0;
             else
-                roundFilter = Int32.Parse(maxRoundDisplay.Text);
+                try
+                {
+                   roundFilter = Int32.Parse(maxRoundDisplay.Text);
+                }
+                catch(FormatException exc)
+                {
+                   roundFilter = 0;
+                }
             if (idMatchFilter == "")        //check if match history is filtered
                 matches = SqliteDataAccess.LoadMatches(roundFilter, matchRound);
             else
@@ -105,7 +102,15 @@ namespace Skill_Simulation
             if ((textBox1.Text) == "")
                 addPlayerAmount = 0;
             else
-                addPlayerAmount = Int32.Parse(textBox1.Text);
+                try
+                {
+                    addPlayerAmount = Int32.Parse(textBox1.Text);
+                }
+                catch(FormatException exc)
+                {
+                    addPlayerAmount = 0;
+                }
+
         }
         /// <summary>
         /// table of players
@@ -163,6 +168,14 @@ namespace Skill_Simulation
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
             idMatchFilter = textBox4.Text;
+            try                         //make sure ID is an integer
+            {
+                Int32.Parse(idMatchFilter);
+            }
+            catch (FormatException exc)
+            {
+                idMatchFilter = "";
+            }
             LoadMatchList();
         }
 
@@ -180,7 +193,15 @@ namespace Skill_Simulation
             if ((textBox5.Text) == "")
                 simulRoundAmount = 0;
             else
-                simulRoundAmount = Int32.Parse(textBox5.Text);
+                try
+                {
+                    simulRoundAmount = Int32.Parse(textBox5.Text);
+                }
+                catch(FormatException exc)
+                {
+                    simulRoundAmount = 0;
+                }
+                
         }
         /// <summary>
         /// simulate specified amount of rounds
