@@ -39,14 +39,9 @@ namespace Skill_Simulation
             this.skillRank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Elo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.eloRank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.queueChance = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.consistency = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.reflectingElo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.reflEloRank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.played = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.drive = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.recharge = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.playedLast = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.skillGain = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.skillDecay = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.button2 = new System.Windows.Forms.Button();
             this.matchListView = new System.Windows.Forms.ListView();
             this.matchID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -60,10 +55,6 @@ namespace Skill_Simulation
             this.round = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.textBox5 = new System.Windows.Forms.TextBox();
@@ -75,15 +66,16 @@ namespace Skill_Simulation
             this.label10 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.maxRoundDisplay = new System.Windows.Forms.TextBox();
-            this.reflectingElo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.reflEloRank = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 41);
+            this.button1.Location = new System.Drawing.Point(16, 50);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(100, 28);
             this.button1.TabIndex = 0;
             this.button1.Text = "Add Players";
             this.button1.UseVisualStyleBackColor = true;
@@ -92,18 +84,20 @@ namespace Skill_Simulation
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 22);
+            this.label1.Location = new System.Drawing.Point(19, 26);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 13);
+            this.label1.Size = new System.Drawing.Size(104, 17);
             this.label1.TabIndex = 1;
             this.label1.Text = "Amount to add:";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(98, 19);
+            this.textBox1.Location = new System.Drawing.Point(131, 23);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(37, 20);
+            this.textBox1.Size = new System.Drawing.Size(48, 22);
             this.textBox1.TabIndex = 2;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
@@ -112,24 +106,18 @@ namespace Skill_Simulation
             this.playerListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.ID,
             this.Player,
-            this.Skill,
             this.skillRank,
-            this.Elo,
             this.eloRank,
-            this.reflectingElo,
             this.reflEloRank,
-            this.queueChance,
-            this.consistency,
-            this.played,
-            this.drive,
-            this.recharge,
-            this.playedLast,
-            this.skillGain,
-            this.skillDecay});
+            this.Skill,
+            this.Elo,
+            this.reflectingElo,
+            this.played});
             this.playerListView.HideSelection = false;
-            this.playerListView.Location = new System.Drawing.Point(166, 41);
+            this.playerListView.Location = new System.Drawing.Point(221, 50);
+            this.playerListView.Margin = new System.Windows.Forms.Padding(4);
             this.playerListView.Name = "playerListView";
-            this.playerListView.Size = new System.Drawing.Size(702, 441);
+            this.playerListView.Size = new System.Drawing.Size(675, 557);
             this.playerListView.TabIndex = 3;
             this.playerListView.UseCompatibleStateImageBehavior = false;
             this.playerListView.View = System.Windows.Forms.View.Details;
@@ -138,7 +126,7 @@ namespace Skill_Simulation
             // ID
             // 
             this.ID.Text = "ID";
-            this.ID.Width = 26;
+            this.ID.Width = 38;
             // 
             // Player
             // 
@@ -149,69 +137,51 @@ namespace Skill_Simulation
             // 
             this.Skill.Text = "Skill";
             this.Skill.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Skill.Width = 36;
+            this.Skill.Width = 55;
             // 
             // skillRank
             // 
             this.skillRank.Text = "Skill Rk";
+            this.skillRank.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.skillRank.Width = 48;
             // 
             // Elo
             // 
             this.Elo.Text = "Elo";
-            this.Elo.Width = 36;
+            this.Elo.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Elo.Width = 55;
             // 
             // eloRank
             // 
             this.eloRank.Text = "Elo Rk";
+            this.eloRank.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.eloRank.Width = 48;
             // 
-            // queueChance
+            // reflectingElo
             // 
-            this.queueChance.Text = "Queue%";
-            this.queueChance.Width = 53;
+            this.reflectingElo.Text = "Refl Elo";
+            this.reflectingElo.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.reflectingElo.Width = 55;
             // 
-            // consistency
+            // reflEloRank
             // 
-            this.consistency.Text = "Consistency";
-            this.consistency.Width = 69;
+            this.reflEloRank.Text = "Refl Elo Rk";
+            this.reflEloRank.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.reflEloRank.Width = 66;
             // 
             // played
             // 
             this.played.Text = "Played";
+            this.played.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.played.Width = 45;
-            // 
-            // drive
-            // 
-            this.drive.Text = "Drive";
-            this.drive.Width = 37;
-            // 
-            // recharge
-            // 
-            this.recharge.Text = "Recharge";
-            this.recharge.Width = 59;
-            // 
-            // playedLast
-            // 
-            this.playedLast.Text = "Last";
-            this.playedLast.Width = 32;
-            // 
-            // skillGain
-            // 
-            this.skillGain.Text = "S. Gain";
-            this.skillGain.Width = 48;
-            // 
-            // skillDecay
-            // 
-            this.skillDecay.Text = "S. Decay";
-            this.skillDecay.Width = 57;
             // 
             // button2
             // 
             this.button2.AutoSize = true;
-            this.button2.Location = new System.Drawing.Point(12, 92);
+            this.button2.Location = new System.Drawing.Point(16, 97);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(108, 23);
+            this.button2.Size = new System.Drawing.Size(144, 28);
             this.button2.TabIndex = 4;
             this.button2.Text = "Remove all Players";
             this.button2.UseVisualStyleBackColor = true;
@@ -230,9 +200,10 @@ namespace Skill_Simulation
             this.eloChange,
             this.round});
             this.matchListView.HideSelection = false;
-            this.matchListView.Location = new System.Drawing.Point(907, 41);
+            this.matchListView.Location = new System.Drawing.Point(962, 50);
+            this.matchListView.Margin = new System.Windows.Forms.Padding(4);
             this.matchListView.Name = "matchListView";
-            this.matchListView.Size = new System.Drawing.Size(530, 441);
+            this.matchListView.Size = new System.Drawing.Size(749, 557);
             this.matchListView.TabIndex = 5;
             this.matchListView.UseCompatibleStateImageBehavior = false;
             this.matchListView.View = System.Windows.Forms.View.Details;
@@ -241,141 +212,119 @@ namespace Skill_Simulation
             // matchID
             // 
             this.matchID.Text = "ID";
-            this.matchID.Width = 34;
+            this.matchID.Width = 38;
             // 
             // winner
             // 
             this.winner.Text = "Winner";
-            this.winner.Width = 61;
+            this.winner.Width = 78;
             // 
             // wSkill
             // 
             this.wSkill.Text = "Skill";
-            this.wSkill.Width = 38;
+            this.wSkill.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.wSkill.Width = 55;
             // 
             // wElo
             // 
             this.wElo.Text = "Elo";
-            this.wElo.Width = 44;
+            this.wElo.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.wElo.Width = 55;
             // 
             // loser
             // 
             this.loser.Text = "Loser";
+            this.loser.Width = 78;
             // 
             // lSkill
             // 
             this.lSkill.Text = "Skill";
-            this.lSkill.Width = 39;
+            this.lSkill.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.lSkill.Width = 55;
             // 
             // lElo
             // 
             this.lElo.Text = "Elo";
-            this.lElo.Width = 43;
+            this.lElo.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.lElo.Width = 55;
             // 
             // eloChange
             // 
             this.eloChange.Text = "EloChange";
+            this.eloChange.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.eloChange.Width = 68;
             // 
             // round
             // 
             this.round.Text = "Round";
+            this.round.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(166, 22);
+            this.label2.Location = new System.Drawing.Point(218, 23);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(55, 13);
+            this.label2.Size = new System.Drawing.Size(74, 17);
             this.label2.TabIndex = 6;
             this.label2.Text = "Player List";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(904, 22);
+            this.label3.Location = new System.Drawing.Point(959, 23);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(72, 13);
+            this.label3.Size = new System.Drawing.Size(94, 17);
             this.label3.TabIndex = 7;
             this.label3.Text = "Match History";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(12, 170);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(39, 20);
-            this.textBox2.TabIndex = 8;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(81, 170);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(39, 20);
-            this.textBox3.TabIndex = 9;
-            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(57, 174);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(18, 13);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "vs";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
-            // 
-            // button3
-            // 
-            this.button3.AutoSize = true;
-            this.button3.Location = new System.Drawing.Point(27, 196);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 11;
-            this.button3.Text = "Play";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(1061, 22);
+            this.label5.Location = new System.Drawing.Point(1167, 23);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(92, 13);
+            this.label5.Size = new System.Drawing.Size(123, 17);
             this.label5.TabIndex = 12;
             this.label5.Text = "Filter by Player ID:";
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(1159, 19);
+            this.textBox4.Location = new System.Drawing.Point(1298, 20);
+            this.textBox4.Margin = new System.Windows.Forms.Padding(4);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(37, 20);
+            this.textBox4.Size = new System.Drawing.Size(48, 22);
             this.textBox4.TabIndex = 13;
             this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(95, 254);
+            this.textBox5.Location = new System.Drawing.Point(131, 221);
+            this.textBox5.Margin = new System.Windows.Forms.Padding(4);
             this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(40, 20);
+            this.textBox5.Size = new System.Drawing.Size(52, 22);
             this.textBox5.TabIndex = 14;
             this.textBox5.TextChanged += new System.EventHandler(this.textBox5_TextChanged);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(9, 257);
+            this.label6.Location = new System.Drawing.Point(19, 224);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(80, 13);
+            this.label6.Size = new System.Drawing.Size(105, 17);
             this.label6.TabIndex = 15;
             this.label6.Text = "Round amount:";
+            this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
             // button4
             // 
             this.button4.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button4.Location = new System.Drawing.Point(12, 280);
+            this.button4.Location = new System.Drawing.Point(16, 253);
+            this.button4.Margin = new System.Windows.Forms.Padding(4);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(108, 23);
+            this.button4.Size = new System.Drawing.Size(144, 28);
             this.button4.TabIndex = 16;
             this.button4.Text = "Simulate";
             this.button4.UseVisualStyleBackColor = true;
@@ -384,18 +333,20 @@ namespace Skill_Simulation
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(163, 485);
+            this.label7.Location = new System.Drawing.Point(218, 611);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(161, 13);
+            this.label7.Size = new System.Drawing.Size(211, 17);
             this.label7.TabIndex = 17;
             this.label7.Text = "Average Rank Difference of Elo:";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(330, 485);
+            this.label8.Location = new System.Drawing.Point(465, 610);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(13, 13);
+            this.label8.Size = new System.Drawing.Size(16, 17);
             this.label8.TabIndex = 18;
             this.label8.Text = "0";
             this.label8.Click += new System.EventHandler(this.label8_Click);
@@ -403,9 +354,10 @@ namespace Skill_Simulation
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(396, 22);
+            this.label9.Location = new System.Drawing.Point(675, 23);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(40, 13);
+            this.label9.Size = new System.Drawing.Size(53, 17);
             this.label9.TabIndex = 19;
             this.label9.Text = "Sort by";
             this.label9.Click += new System.EventHandler(this.label9_Click);
@@ -413,9 +365,10 @@ namespace Skill_Simulation
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(1247, 22);
+            this.label10.Location = new System.Drawing.Point(1416, 23);
+            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(138, 13);
+            this.label10.Size = new System.Drawing.Size(181, 17);
             this.label10.TabIndex = 20;
             this.label10.Text = "Show the last          Rounds";
             this.label10.Click += new System.EventHandler(this.label10_Click);
@@ -425,37 +378,54 @@ namespace Skill_Simulation
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "SkillRank",
-            "EloRank"});
-            this.comboBox1.Location = new System.Drawing.Point(436, 18);
+            "EloRank",
+            "ReflEloRank"});
+            this.comboBox1.Location = new System.Drawing.Point(736, 18);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(4);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.Size = new System.Drawing.Size(160, 24);
             this.comboBox1.TabIndex = 21;
             this.comboBox1.Text = "SkillRank";
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // maxRoundDisplay
             // 
-            this.maxRoundDisplay.Location = new System.Drawing.Point(1315, 19);
+            this.maxRoundDisplay.Location = new System.Drawing.Point(1507, 20);
+            this.maxRoundDisplay.Margin = new System.Windows.Forms.Padding(4);
             this.maxRoundDisplay.Name = "maxRoundDisplay";
-            this.maxRoundDisplay.Size = new System.Drawing.Size(26, 20);
+            this.maxRoundDisplay.Size = new System.Drawing.Size(33, 22);
             this.maxRoundDisplay.TabIndex = 22;
             this.maxRoundDisplay.Text = "10";
             this.maxRoundDisplay.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
             // 
-            // reflectingElo
+            // label11
             // 
-            this.reflectingElo.Text = "Refl Elo";
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(218, 632);
+            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(240, 17);
+            this.label11.TabIndex = 23;
+            this.label11.Text = "Average Rank Difference of Refl Elo:";
+            this.label11.Click += new System.EventHandler(this.label11_Click);
             // 
-            // reflEloRank
+            // label12
             // 
-            this.reflEloRank.Text = "Refl Elo Rk";
-            this.reflEloRank.Width = 66;
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(465, 632);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(16, 17);
+            this.label12.TabIndex = 24;
+            this.label12.Text = "0";
+            this.label12.Click += new System.EventHandler(this.label12_Click);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1475, 640);
+            this.ClientSize = new System.Drawing.Size(1763, 681);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.maxRoundDisplay);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label10);
@@ -467,10 +437,6 @@ namespace Skill_Simulation
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox2);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.matchListView);
@@ -480,6 +446,7 @@ namespace Skill_Simulation
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
             this.Cursor = System.Windows.Forms.Cursors.Default;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "View";
             this.ResumeLayout(false);
@@ -507,34 +474,25 @@ namespace Skill_Simulation
         private System.Windows.Forms.ColumnHeader lElo;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ColumnHeader eloChange;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.ColumnHeader queueChance;
-        private System.Windows.Forms.ColumnHeader consistency;
         private System.Windows.Forms.ColumnHeader skillRank;
         private System.Windows.Forms.ColumnHeader eloRank;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ColumnHeader round;
         private System.Windows.Forms.ColumnHeader played;
-        private System.Windows.Forms.ColumnHeader drive;
-        private System.Windows.Forms.ColumnHeader recharge;
-        private System.Windows.Forms.ColumnHeader playedLast;
-        private System.Windows.Forms.ColumnHeader skillGain;
-        private System.Windows.Forms.ColumnHeader skillDecay;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.TextBox maxRoundDisplay;
         private System.Windows.Forms.ColumnHeader reflectingElo;
         private System.Windows.Forms.ColumnHeader reflEloRank;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
     }
 }

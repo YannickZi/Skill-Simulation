@@ -18,8 +18,6 @@ namespace Skill_Simulation
         int addPlayerAmount = 0;            //amount of players to add
         int simulRoundAmount = 0;           //amount of rounds to simulate
         int matchRound;
-        string idA = "";                    //ID of player 1 in a match                         TODO: just use text boxes
-        string idB = "";                    //ID of player 2 in a match
         string idMatchFilter = "";          //ID of player to filter match history
 
         /// <summary>
@@ -39,29 +37,23 @@ namespace Skill_Simulation
         private void LoadPlayerList()
         {
             playerListView.Items.Clear();
-            players = SqliteDataAccess.LoadPlayers(comboBox1.Text);
+            players = SqliteDataAccess.LoadPlayers(comboBox1.Text);         //filtered by dropdown list
             foreach (PlayerModel player in players)
             {
                 ListViewItem nextPlayer = new ListViewItem(player.ID.ToString()); //add all relevant values of a player to the list
                 nextPlayer.SubItems.Add(player.Name);
-                nextPlayer.SubItems.Add(player.Skill.ToString());
                 nextPlayer.SubItems.Add(player.SkillRank.ToString());
-                nextPlayer.SubItems.Add(player.Elo.ToString());
                 nextPlayer.SubItems.Add(player.EloRank.ToString());
-                nextPlayer.SubItems.Add(player.ReflectingElo.ToString());
                 nextPlayer.SubItems.Add(player.ReflEloRank.ToString());
-                double queuePerc = Math.Round(player.QueueChance * 100, 1);  //transform percentage 
-                nextPlayer.SubItems.Add(queuePerc.ToString() + "%");
-                nextPlayer.SubItems.Add(player.Consistency.ToString());
+                nextPlayer.SubItems.Add(player.Skill.ToString());
+                nextPlayer.SubItems.Add(player.Elo.ToString());
+                nextPlayer.SubItems.Add(player.ReflectingElo.ToString());
                 nextPlayer.SubItems.Add(player.Played.ToString());
-                nextPlayer.SubItems.Add(player.Drive.ToString());
-                nextPlayer.SubItems.Add(player.Recharge.ToString());
-                nextPlayer.SubItems.Add(player.PlayedLast.ToString());
-                nextPlayer.SubItems.Add(player.SkillGain.ToString());
-                nextPlayer.SubItems.Add(player.SkillDecay.ToString());
                 playerListView.Items.Add(nextPlayer);
             }
-            label8.Text = Program.CalculateEloRankDiff(players).ToString();           
+            var eloDiffs = Program.CalculateEloRankDiffs(players);
+            label8.Text = eloDiffs.Item1.ToString();
+            label12.Text = eloDiffs.Item2.ToString();   
         }
         /// <summary>
         /// load matches from DB into GUI
@@ -73,7 +65,14 @@ namespace Skill_Simulation
             if (string.IsNullOrEmpty(maxRoundDisplay.Text))
                 roundFilter = 0;
             else
-                roundFilter = Int32.Parse(maxRoundDisplay.Text);
+                try
+                {
+                   roundFilter = Int32.Parse(maxRoundDisplay.Text);
+                }
+                catch(FormatException exc)
+                {
+                   roundFilter = 0;
+                }
             if (idMatchFilter == "")        //check if match history is filtered
                 matches = SqliteDataAccess.LoadMatches(roundFilter, matchRound);
             else
@@ -103,7 +102,15 @@ namespace Skill_Simulation
             if ((textBox1.Text) == "")
                 addPlayerAmount = 0;
             else
-                addPlayerAmount = Int32.Parse(textBox1.Text);
+                try
+                {
+                    addPlayerAmount = Int32.Parse(textBox1.Text);
+                }
+                catch(FormatException exc)
+                {
+                    addPlayerAmount = 0;
+                }
+
         }
         /// <summary>
         /// table of players
@@ -153,41 +160,6 @@ namespace Skill_Simulation
         {
 
         }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-        /// <summary>
-        /// start match between two chosen players
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void button3_Click(object sender, EventArgs e)      //TODO take StartMatch output, update other players aswell
-        {
-            matchRound++;
-            Program.StartMatch(SqliteDataAccess.GetPlayer(idA), SqliteDataAccess.GetPlayer(idB), matchRound);
-            LoadMatchList();
-            LoadPlayerList();
-        }
-        /// <summary>
-        /// pick first player
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-            idA = textBox2.Text;
-        }
-        /// <summary>
-        /// pick second player
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-            idB = textBox3.Text;
-        }
         /// <summary>
         /// filter match history by player id
         /// </summary>
@@ -196,6 +168,14 @@ namespace Skill_Simulation
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
             idMatchFilter = textBox4.Text;
+            try                         //make sure ID is an integer
+            {
+                Int32.Parse(idMatchFilter);
+            }
+            catch (FormatException exc)
+            {
+                idMatchFilter = "";
+            }
             LoadMatchList();
         }
 
@@ -213,7 +193,15 @@ namespace Skill_Simulation
             if ((textBox5.Text) == "")
                 simulRoundAmount = 0;
             else
-                simulRoundAmount = Int32.Parse(textBox5.Text);
+                try
+                {
+                    simulRoundAmount = Int32.Parse(textBox5.Text);
+                }
+                catch(FormatException exc)
+                {
+                    simulRoundAmount = 0;
+                }
+                
         }
         /// <summary>
         /// simulate specified amount of rounds
@@ -234,8 +222,10 @@ namespace Skill_Simulation
                 {
                     matchesNewRound.AddRange(Program.CreateMatches(queuedPlayers, matchRound));
                 }
-                matchesNewTotal.AddRange(matchesNewRound);
-                matches.AddRange(matchesNewRound);
+                matchesNewTotal.AddRange(matchesNewRound);              //for saving into the DB
+                matches.AddRange(matchesNewRound);                      //for immmediate use in calculations
+                if(matchesNewRound.Count > 0)
+                    Program.CalculateReflElo(matchesNewRound, matches, players);
             }
             SqliteDataAccess.SaveMatches(matchesNewTotal);
             SqliteDataAccess.UpdatePlayers(players);
@@ -275,6 +265,21 @@ namespace Skill_Simulation
         private void textBox6_TextChanged(object sender, EventArgs e)
         {
             LoadMatchList();
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
         }
     }
     
